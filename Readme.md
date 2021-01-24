@@ -9,5 +9,5 @@ yarn web
 Using react native elements:
 >yarn add react-native-elements@beta
 
-Installing react navigation:
->yarn add react-navigation
+Installing react navigation version 5:
+--follow official documentation

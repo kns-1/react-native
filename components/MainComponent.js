@@ -66,7 +66,6 @@ class Main extends Component {
       //   <Dishdetail dish={this.state.dishes.filter((dish) => dish.id === this.state.selectedDish)[0]} />
       // </View>
 
-
       <NavigationContainer>
         <MainNavigator />
       </NavigationContainer>

@@ -16,7 +16,7 @@ function RenderItem(props) {
                 featuredSubtitle={item.designation}
                 image={require('./images/uthappizza.png')}>
                 <Text style={{ margin: 10 }}>
-                    {item.description} </Text>
+                    {item.description}</Text>
             </Card>
         );
     }

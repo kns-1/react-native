@@ -11,7 +11,7 @@ function RenderDish(props) {
         return (
             <Card
                 featuredTitle={dish.name}
-                image={require('./images/uthappizza.png')}>
+                image={require('./images/uthappizza.png')} >
                 <Text style={{ margin: 10 }}>
                     {dish.description}
                 </Text>
@@ -42,9 +42,9 @@ class Dishdetail extends Component {
     };
 
     render() {
-        
-     const dishId = this.props.route.params.dishId;
-        return(
+
+        const dishId = this.props.route.params.dishId;
+        return (
             <RenderDish dish={this.state.dishes[+dishId]} />
         );
     }
