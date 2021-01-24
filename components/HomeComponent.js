@@ -11,10 +11,10 @@ function RenderItem(props) {
 
     if (item != null) {
         return (
-            <Card
-                featuredTitle={item.name}
-                featuredSubtitle={item.designation}
-                image={require('./images/uthappizza.png')}>
+            <Card>
+                <Card.Title>{item.name}</Card.Title>
+                <Card.FeaturedSubtitle>{item.designation}</Card.FeaturedSubtitle>
+                <Card.Image source={require('./images/uthappizza.png')} />
                 <Text style={{ margin: 10 }}>
                     {item.description}</Text>
             </Card>
