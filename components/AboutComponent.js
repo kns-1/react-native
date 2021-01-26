@@ -4,6 +4,7 @@ import { Card } from 'react-native-elements';
 import { FlatList } from 'react-native';
 import { ListItem, Avatar } from 'react-native-elements';
 import { LEADERS } from '../shared/leaders';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 function History() {
@@ -45,8 +46,9 @@ class About extends Component {
         };
 
         return (
-            <View>
+            <ScrollView>
                 <History />
+
                 <Card>
                     <Card.Title>Corporate Leadership</Card.Title>
                     <Card.Divider />
@@ -58,7 +60,7 @@ class About extends Component {
                     />
 
                 </Card>
-            </View>
+            </ScrollView>
         );
     }
 }

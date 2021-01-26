@@ -23,14 +23,14 @@ class Menu extends Component {
 
         const renderMenuItem = ({ item, index }) => {
             return (
-                <ListItem key={index}  
+                <ListItem key={index}
                     onPress={() => navigate('Dishdetail', { dishId: item.id })}>
-                <Avatar source={require('./images/uthappizza.png')} />
-                <ListItem.Content>
-                    <ListItem.Title>{item.name}</ListItem.Title>
-                    <ListItem.Subtitle>{item.description}</ListItem.Subtitle>
-                </ListItem.Content>
-            </ListItem>
+                    <Avatar source={require('./images/uthappizza.png')} />
+                    <ListItem.Content>
+                        <ListItem.Title>{item.name}</ListItem.Title>
+                        <ListItem.Subtitle>{item.description}</ListItem.Subtitle>
+                    </ListItem.Content>
+                </ListItem>
             );
         };
 

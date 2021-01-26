@@ -4,7 +4,7 @@ import Home from './HomeComponent';
 import Dishdetail from './DishdetailComponent';
 import About from './AboutComponent';
 import Contact from './ContactComponent';
-import { View, Platform, Text, ScrollView, Image, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
