@@ -6,9 +6,11 @@ import About from './AboutComponent';
 import Contact from './ContactComponent';
 import { View, Platform, Text, ScrollView, Image, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { Icon } from 'react-native-elements';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 
 
 const Stack = createStackNavigator();
@@ -111,11 +113,30 @@ const ContactNavigator = () => {
 };
 
 
+const CustomDrawerContentComponent = (props) => (
+  <ScrollView>
+    <SafeAreaView style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
+      <View style={styles.drawerHeader}>
+        <View style={{flex:1}}>
+        <Image source={require('./images/logo.png')} style={styles.drawerImage} />
+        </View>
+        <View style={{flex: 2}}>
+          <Text style={styles.drawerHeaderText}>Ristorante Con Fusion</Text>
+        </View>
+      </View>
+      <DrawerItemList {...props} />
+    </SafeAreaView>
+  </ScrollView>
+);
+
+
 const MainNavigator = () => {
   return (
     <Drawer.Navigator initialRouteName="Home" drawerStyle={{
-      backgroundColor: '#D1C4E9',
-    }}>
+      backgroundColor: '#D1C4E9', 
+    }}
+    drawerContent= { (props) => <CustomDrawerContentComponent {...props} />}
+    >
     <Drawer.Screen name="Home" component={HomeNavigator} options={{
       title: 'Home',
       drawerLabel: 'Home',
@@ -193,5 +214,30 @@ class Main extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  drawerHeader: {
+    backgroundColor: '#512DA8',
+    height: 140,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    flexDirection: 'row'
+  },
+  drawerHeaderText: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold'
+  },
+  drawerImage: {
+    margin: 10,
+    width: 80,
+    height: 60
+  }
+});
+
 
 export default Main;
