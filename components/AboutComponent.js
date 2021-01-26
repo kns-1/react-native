@@ -3,8 +3,9 @@ import { Text } from 'react-native';
 import { Card } from 'react-native-elements';
 import { FlatList } from 'react-native';
 import { ListItem, Avatar } from 'react-native-elements';
-import { LEADERS } from '../shared/leaders';
 import { ScrollView } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
+import { baseUrl } from '../shared/baseUrl';
 
 
 function History() {
@@ -22,21 +23,27 @@ function History() {
     );
 }
 
+
+const mapStateToProps = state => {
+    return {
+        leaders: state.leaders
+    }
+}
+
 class About extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            leaders: LEADERS,
-        };
-    }
-
+    // constructor(props) {
+    //     super(props);
+    //     this.state = {
+    //         leaders: LEADERS,
+    //     };
+    // }
 
     render() {
         const renderLeadersItem = ({ item, index }) => {
             return (
                 <ListItem key={index}>
-                    <Avatar source={require('./images/alberto.png')} />
+                    <Avatar source={{ uri: baseUrl + item.image }} />
                     <ListItem.Content>
                         <ListItem.Title>{item.name}</ListItem.Title>
                         <ListItem.Subtitle>{item.description}</ListItem.Subtitle>
@@ -53,7 +60,8 @@ class About extends Component {
                     <Card.Title>Corporate Leadership</Card.Title>
                     <Card.Divider />
                     <FlatList
-                        data={this.state.leaders}
+                        //  data={this.state.leaders}
+                        data={this.props.leaders.leaders}
                         renderItem={renderLeadersItem}
                         keyExtractor={item => item.id.toString()}
                     />
@@ -63,4 +71,4 @@ class About extends Component {
     }
 }
 
-export default About;
+export default connect(mapStateToProps)(About);
