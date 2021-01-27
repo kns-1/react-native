@@ -32,7 +32,12 @@ Start JSON server:
 *******************
 
 Install Redux:
->yarn add redux@4.0.0
-yarn add react-redux@5.0.7
-yarn add redux-thunk@2.2.0
-yarn add redux-logger@3.0.6
+>yarn add redux
+yarn add react-redux
+yarn add redux-thunk
+yarn add redux-logger
+
+********************
+Debugging:
+>yarn global add react-devtools
+react-devtools
