@@ -94,7 +94,7 @@ class Dishdetail extends Component {
         const dishId = this.props.route.params.dishId;
         return (
             <ScrollView>
-                <RenderDish dish={this.state.dishes.dishes[+dishId]}
+                <RenderDish dish={this.props.dishes.dishes[+dishId]}
                     favorite={this.state.favorites.some(my_element => my_element === dishId)}
                     onPress={() => this.markFavorite(dishId)} />
 

@@ -206,7 +206,7 @@ const MainNavigator = () => {
 class Main extends Component {
   // constructor(props) {
   //   super(props);
-  //   this.state = {
+  //   this.state = { 
   //     dishes: DISHES,
   //     selectedDish: null
   //   };
@@ -216,7 +216,7 @@ class Main extends Component {
   //   this.setState({ selectedDish: dishId })
   // }
 
-  UNSAFE_componentDidMount() {
+ componentDidMount() {
     this.props.fetchDishes();
     this.props.fetchComments();
     this.props.fetchPromos();
