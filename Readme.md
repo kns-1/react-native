@@ -41,3 +41,9 @@ yarn add redux-logger
 Debugging:
 >yarn global add react-devtools
 react-devtools
+
+********************
+Adding date-picker (forms):
+>yarn add @react-native-community/datetimepicker
+npm install -g pod
+yarn add @react-native-picker/picker
