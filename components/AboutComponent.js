@@ -100,7 +100,7 @@ class About extends Component {
                         <Card.Title>Corporate Leadership</Card.Title>
                         <FlatList
                             data={this.props.leaders.leaders}
-                            renderItem={renderLeader}
+                            renderItem={renderLeadersItem}
                             keyExtractor={item => item.id.toString()}
                         />
                     </Card>

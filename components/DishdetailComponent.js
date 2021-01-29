@@ -4,7 +4,7 @@ import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
-import { postFavorite } from '../redux/ActionCreators';
+import { postFavorite, postComment } from '../redux/ActionCreators';
 
 
 const mapStateToProps = state => {
@@ -16,7 +16,8 @@ const mapStateToProps = state => {
 }
 
 const mapDispatchToProps = dispatch => ({
-    postFavorite: (dishId) => dispatch(postFavorite(dishId))
+    postFavorite: (dishId) => dispatch(postFavorite(dishId)),
+    postComment: (dishId, rating, author, comment) => dispatch(postComment(dishId, rating, author, comment))
 })
 
 function RenderDish(props) {
@@ -61,7 +62,9 @@ function RenderDish(props) {
 // }
 
 function RenderComments(props) {
-    const comments = props.comments;
+      const comments = props.comments;
+      const postComment = props.postComment;
+      const dishId = props.dishId;
 
     const renderCommentItem = ({ item, index }) => {
 
@@ -93,8 +96,14 @@ class Dishdetail extends Component {
             //  dishes: DISHES,
             //  comments: COMMENTS,
             favorites: [],
+            rating:'',
+            author:'',
+            comment:'',
             showModal: false
         };
+
+        this.toggleModal = this.toggleModal.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     static navigationOptions = {
@@ -111,9 +120,21 @@ class Dishdetail extends Component {
         this.setState({ showModal: !this.state.showModal });
     }
 
-    // ratingCompleted(rating) {
-    //     console.log("Rating is: " + rating)
-    // }
+    handleSubmit() {
+        this.toggleModal();
+        this.props.postComment(this.props.route.params.dishId, this.state.rating, this.state.author, this.state.comment);
+
+        <RenderComments comments={this.props.comments.comments.filter((comment) => comment.dishId ===this.props.route.params.dishId)} />
+    }
+
+    resetForm() {
+        this.setState({
+            rating:'',
+            author:'',
+            comment:'',
+            showModal: false
+        });
+    }
 
     render() {
 
@@ -142,14 +163,14 @@ class Dishdetail extends Component {
                             ratingCount={5}
                             style={styles.modalText}
                             showRating
-                        // onFinishRating={this.ratingCompleted}
+                            onFinishRating={value => this.setState({ rating: value })}
                         />
 
                         <Input
                             placeholder="Author"
                             leftIcon={{ type: 'font-awesome', name: 'user-o' }}
                             style={styles.modalText}
-                            onChangeText={value => this.setState({ comment: value })}
+                            onChangeText={value => this.setState({ author: value })}
                         />
 
                         <Input
@@ -160,14 +181,14 @@ class Dishdetail extends Component {
                         />
 
                         <Button
-                            onPress={() => { this.toggleModal(); }}
+                            onPress={() => { this.handleSubmit(); }}
                             color="#512DA8"
                             title="Submit"
                             style={styles.modalText}
                         />
 
                         <Button
-                            onPress={() => { this.toggleModal(); }}
+                            onPress={() => { this.toggleModal(); this.resetForm(); }}
                             color="grey"
                             title="Cancel"
                             style={styles.modalText}
