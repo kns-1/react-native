@@ -27,7 +27,7 @@ cd json-server
 npm install json-server -g
 
 Start JSON server:
->json-server --host 192.168.1.126 --watch db.json -p 3001 -d 2000
+>json-server --host 192.168.1.114 --watch db.json -p 3001 -d 2000
 
 *******************
 
