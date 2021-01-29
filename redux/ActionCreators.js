@@ -9,7 +9,7 @@ export const addComment = (comment) => ({
 
 export const postComment = (dishId, rating, author, comment) => (dispatch) => {
 
-    const newComment = {
+     const newComment = {
         dishId: dishId,
         rating: rating,
         author: author,

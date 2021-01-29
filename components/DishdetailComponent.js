@@ -123,8 +123,6 @@ class Dishdetail extends Component {
     handleSubmit() {
         this.toggleModal();
         this.props.postComment(this.props.route.params.dishId, this.state.rating, this.state.author, this.state.comment);
-
-        <RenderComments comments={this.props.comments.comments.filter((comment) => comment.dishId ===this.props.route.params.dishId)} />
     }
 
     resetForm() {
@@ -181,14 +179,14 @@ class Dishdetail extends Component {
                         />
 
                         <Button
-                            onPress={() => { this.handleSubmit(); }}
+                            onPress={() => { this.handleSubmit();  this.resetForm(); }}
                             color="#512DA8"
                             title="Submit"
                             style={styles.modalText}
                         />
 
                         <Button
-                            onPress={() => { this.toggleModal(); this.resetForm(); }}
+                            onPress={() => { this.toggleModal(); }}
                             color="grey"
                             title="Cancel"
                             style={styles.modalText}
