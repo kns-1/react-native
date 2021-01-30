@@ -55,3 +55,7 @@ Swipe-out button:
 ********************
 Animatable:
 >yarn add react-native-animatable@1.2.4
+
+********************
+Redux Persist:
+>yarn add redux-persist@5.9.1
