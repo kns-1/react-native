@@ -47,3 +47,7 @@ Adding date-picker (forms):
 >yarn add @react-native-community/datetimepicker
 npm install -g pod
 yarn add @react-native-picker/picker
+
+********************
+Swipe-out:
+>yarn add react-native-swipeout@2.3.3
