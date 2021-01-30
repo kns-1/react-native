@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Text, ScrollView, View, StyleSheet, Button, Modal } from 'react-native';
+import { Text, ScrollView, View, StyleSheet, Button, Modal, Alert, PanResponder } from 'react-native';
 import { Card, Icon, Rating, Input } from 'react-native-elements';
 import { FlatList } from 'react-native';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { postFavorite, postComment } from '../redux/ActionCreators';
+import * as Animatable from 'react-native-animatable';
 
 
 const mapStateToProps = state => {
@@ -24,32 +25,78 @@ function RenderDish(props) {
 
     const dish = props.dish;
 
+    handleViewRef = ref => this.view = ref;
+
+    const recognizeDrag = ({ moveX, moveY, dx, dy }) => {
+        if (dx < -200)
+            return true;
+        else
+            return false;
+    }
+
+    const panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: (e, gestureState) => {
+            return true;
+        },
+        onPanResponderGrant: () => {
+            this.view.rubberBand(1000).then(
+                endState => console.log(endState.finished ? 'finished' : 'cancelled')
+            );
+        },
+        onPanResponderEnd: (e, gestureState) => {
+            console.log("pan responder end", gestureState);
+            if (recognizeDrag(gestureState))
+                Alert.alert(
+                    'Add Favorite',
+                    'Are you sure you wish to add ' + dish.name + ' to favorite?',
+                    [
+                        {
+                            text: 'Cancel',
+                            onPress: () => console.log('Cancel Pressed'),
+                            style: 'cancel'
+                        },
+                        {
+                            text: 'OK',
+                            onPress: () => { props.favorite ? console.log('Already favorite') : props.onPress() }
+                        },
+                    ],
+                    { cancelable: false }
+                );
+
+            return true;
+        }
+    })
+
     if (dish != null) {
         return (
-            <Card>
-                <Card.Title>{dish.name}</Card.Title>
-                <Card.Image source={{ uri: baseUrl + dish.image }} />
-                <Text style={{ margin: 10 }}>
-                    {dish.description}
-                </Text>
-                <Icon
-                    raised
-                    reverse
-                    name={props.favorite ? 'heart' : 'heart-o'}
-                    type='font-awesome'
-                    color='#f50'
-                    onPress={() => props.favorite ? console.log('Already favorite') : props.onPress('fav')}
-                />
+            <Animatable.View animation="fadeInDown" duration={2000} delay={1000}
+                ref={this.handleViewRef}
+                {...panResponder.panHandlers}>
+                <Card>
+                    <Card.Title>{dish.name}</Card.Title>
+                    <Card.Image source={{ uri: baseUrl + dish.image }} />
+                    <Text style={{ margin: 10 }}>
+                        {dish.description}
+                    </Text>
+                    <Icon
+                        raised
+                        reverse
+                        name={props.favorite ? 'heart' : 'heart-o'}
+                        type='font-awesome'
+                        color='#f50'
+                        onPress={() => props.favorite ? console.log('Already favorite') : props.onPress('fav')}
+                    />
 
-                <Icon
-                    raised
-                    reverse
-                    name='pencil'
-                    type='font-awesome'
-                    color='#512DA8'
-                    onPress={() => props.onPress('pen')}
-                />
-            </Card>
+                    <Icon
+                        raised
+                        reverse
+                        name='pencil'
+                        type='font-awesome'
+                        color='#512DA8'
+                        onPress={() => props.onPress('pen')}
+                    />
+                </Card>
+            </Animatable.View>
         );
     }
     else {
@@ -62,9 +109,9 @@ function RenderDish(props) {
 // }
 
 function RenderComments(props) {
-      const comments = props.comments;
-      const postComment = props.postComment;
-      const dishId = props.dishId;
+    const comments = props.comments;
+    const postComment = props.postComment;
+    const dishId = props.dishId;
 
     const renderCommentItem = ({ item, index }) => {
 
@@ -78,13 +125,15 @@ function RenderComments(props) {
     };
 
     return (
-        <Card title='Comments' >
-            <FlatList
-                data={comments}
-                renderItem={renderCommentItem}
-                keyExtractor={item => item.id.toString()}
-            />
-        </Card>
+        <Animatable.View animation="fadeInUp" duration={2000} delay={1000}>
+            <Card title='Comments' >
+                <FlatList
+                    data={comments}
+                    renderItem={renderCommentItem}
+                    keyExtractor={item => item.id.toString()}
+                />
+            </Card>
+        </Animatable.View>
     );
 }
 
@@ -96,9 +145,9 @@ class Dishdetail extends Component {
             //  dishes: DISHES,
             //  comments: COMMENTS,
             favorites: [],
-            rating:'',
-            author:'',
-            comment:'',
+            rating: '',
+            author: '',
+            comment: '',
             showModal: false
         };
 
@@ -127,9 +176,9 @@ class Dishdetail extends Component {
 
     resetForm() {
         this.setState({
-            rating:'',
-            author:'',
-            comment:'',
+            rating: '',
+            author: '',
+            comment: '',
             showModal: false
         });
     }
@@ -179,7 +228,7 @@ class Dishdetail extends Component {
                         />
 
                         <Button
-                            onPress={() => { this.handleSubmit();  this.resetForm(); }}
+                            onPress={() => { this.handleSubmit(); this.resetForm(); }}
                             color="#512DA8"
                             title="Submit"
                             style={styles.modalText}

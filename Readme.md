@@ -49,5 +49,9 @@ npm install -g pod
 yarn add @react-native-picker/picker
 
 ********************
-Swipe-out:
+Swipe-out button:
 >yarn add react-native-swipeout@2.3.3
+
+********************
+Animatable:
+>yarn add react-native-animatable@1.2.4
