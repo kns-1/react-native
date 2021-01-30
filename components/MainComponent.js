@@ -5,6 +5,7 @@ import Dishdetail from './DishdetailComponent';
 import About from './AboutComponent';
 import Contact from './ContactComponent';
 import Reservation from './ReservationComponent';
+import Favorites from './FavoriteComponent';
 import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
@@ -48,7 +49,7 @@ const MenuNavigator = () => {
       }}
 
       options={{
-        headerLeft: () => (<Icon name="menu" size={24}
+        headerLeft: () => (<Icon name="list" size={24}
           color='white'
           onPress={() => navigation.toggleDrawer()} />
         ),
@@ -74,7 +75,7 @@ const HomeNavigator = () => {
     }}
 
       options={{
-        headerLeft: () => (<Icon name="menu" size={24}
+        headerLeft: () => (<Icon name="home" size={24}
           color='white'
           onPress={() => navigation.toggleDrawer()} />
         ),
@@ -97,7 +98,7 @@ const AboutNavigator = () => {
     }}
 
       options={{
-        headerLeft: () => (<Icon name="menu" size={24}
+        headerLeft: () => (<Icon name="info-circle" size={24}
           color='white'
           onPress={() => navigation.toggleDrawer()} />
         ),
@@ -120,7 +121,7 @@ const ContactNavigator = () => {
     }}
 
       options={{
-        headerLeft: () => (<Icon name="menu" size={24}
+        headerLeft: () => (<Icon name="address-card" size={24}
           color='white'
           onPress={() => navigation.toggleDrawer()} />
         ),
@@ -143,12 +144,35 @@ const ReservationNavigator = () => {
     }}
 
       options={{
-        headerLeft: () => (<Icon name="menu" size={24}
+        headerLeft: () => (<Icon name="utensils" size={24}
           color='white'
           onPress={() => navigation.toggleDrawer()} />
         ),
       }}>
       <Stack.Screen name="Reserve Table" component={Reservation} />
+    </Stack.Navigator>
+  );
+};
+
+const FavoritesNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#512DA8',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        color: "#fff",
+      },
+    }}
+
+      options={{
+        headerLeft: () => (<Icon name="heart" size={24}
+          color='white'
+          onPress={() => navigation.toggleDrawer()} />
+        ),
+      }}>
+      <Stack.Screen name="My Favorites" component={Favorites} />
     </Stack.Navigator>
   );
 };
@@ -176,8 +200,9 @@ const MainNavigator = () => {
     <Drawer.Navigator initialRouteName="Home" drawerStyle={{
       backgroundColor: '#D1C4E9',
     }}
-      drawerContent={(props) => <CustomDrawerContentComponent {...props} />}
-    >
+      drawerContent={(props) => <CustomDrawerContentComponent {...props} />
+      }>
+
       <Drawer.Screen name="Home" component={HomeNavigator} options={{
         title: 'Home',
         drawerLabel: 'Home',
@@ -189,6 +214,7 @@ const MainNavigator = () => {
             color={tintColor} />
         )
       }} />
+
       <Drawer.Screen name="About Us" component={AboutNavigator} options={{
         title: 'About Us',
         drawerLabel: 'About Us',
@@ -200,6 +226,7 @@ const MainNavigator = () => {
             color={tintColor} />
         )
       }} />
+
       <Drawer.Screen name="Menu" component={MenuNavigator} options={{
         title: 'Menu',
         drawerLabel: 'Menu',
@@ -224,6 +251,18 @@ const MainNavigator = () => {
         )
       }} />
 
+      <Drawer.Screen name="Favorites" component={FavoritesNavigator} options={{
+        title: 'My Favorites',
+        drawerLabel: 'My Favorites',
+        drawerIcon: ({ tintColor }) => (
+          <Icon
+            name='heart'
+            type='font-awesome'
+            sise={24}
+            color={tintColor} />
+        )
+      }} />
+
       <Drawer.Screen name="Reserve Table" component={ReservationNavigator} options={{
         title: 'Reserve Table',
         drawerLabel: 'Reserve Table',
@@ -235,6 +274,7 @@ const MainNavigator = () => {
             color={tintColor} />
         )
       }} />
+
     </Drawer.Navigator>
   );
 };
