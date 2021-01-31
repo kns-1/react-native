@@ -71,3 +71,7 @@ Image picking:
 >yarn add @react-navigation/bottom-tabs
 expo install expo-image-picker
 expo install expo-image-manipulator
+
+********************
+Network Info:
+>yarn add @react-native-community/netinfo
