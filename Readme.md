@@ -67,3 +67,7 @@ expo install expo-permissions
 expo install expo-notifications
 
 ********************
+Image picking:
+>yarn add @react-navigation/bottom-tabs
+expo install expo-image-picker
+expo install expo-image-manipulator
