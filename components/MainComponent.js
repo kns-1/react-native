@@ -6,6 +6,7 @@ import About from './AboutComponent';
 import Contact from './ContactComponent';
 import Reservation from './ReservationComponent';
 import Favorites from './FavoriteComponent';
+import Login from './LoginComponent';
 import { View, Text, ScrollView, Image, StyleSheet } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerItemList } from '@react-navigation/drawer';
@@ -98,7 +99,7 @@ const AboutNavigator = () => {
     }}
 
       options={{
-        headerLeft: () => (<Icon name="info-circle" size={24}
+        headerLeft: () => (<Icon name="menu" size={24}
           color='white'
           onPress={() => navigation.toggleDrawer()} />
         ),
@@ -121,7 +122,7 @@ const ContactNavigator = () => {
     }}
 
       options={{
-        headerLeft: () => (<Icon name="address-card" size={24}
+        headerLeft: () => (<Icon name="menu" size={24}
           color='white'
           onPress={() => navigation.toggleDrawer()} />
         ),
@@ -144,7 +145,7 @@ const ReservationNavigator = () => {
     }}
 
       options={{
-        headerLeft: () => (<Icon name="utensils" size={24}
+        headerLeft: () => (<Icon name="menu" size={24}
           color='white'
           onPress={() => navigation.toggleDrawer()} />
         ),
@@ -167,7 +168,7 @@ const FavoritesNavigator = () => {
     }}
 
       options={{
-        headerLeft: () => (<Icon name="heart" size={24}
+        headerLeft: () => (<Icon name="menu" size={24}
           color='white'
           onPress={() => navigation.toggleDrawer()} />
         ),
@@ -177,6 +178,28 @@ const FavoritesNavigator = () => {
   );
 };
 
+const LoginNavigator = () => {
+  return (
+    <Stack.Navigator screenOptions={{
+      headerStyle: {
+        backgroundColor: '#512DA8',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        color: "#fff",
+      },
+    }}
+
+      options={{
+        headerLeft: () => (<Icon name="menu" size={24}
+          color='white'
+          onPress={() => navigation.toggleDrawer()} />
+        ),
+      }}>
+      <Stack.Screen name="Login" component={Login} />
+    </Stack.Navigator>
+  );
+};
 
 const CustomDrawerContentComponent = (props) => (
   <ScrollView>
@@ -275,6 +298,18 @@ const MainNavigator = () => {
         )
       }} />
 
+      <Drawer.Screen name="Login" component={LoginNavigator} options={{
+        title: 'Login',
+        drawerLabel: 'Login',
+        drawerIcon: ({ tintColor }) => (
+          <Icon
+            name='sign-in'
+            type='font-awesome'
+            sise={22}
+            color={tintColor} />
+        )
+      }} />
+      
     </Drawer.Navigator>
   );
 };

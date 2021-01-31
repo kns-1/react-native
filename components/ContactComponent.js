@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import { Card } from 'react-native-elements';
+import { Card, Button, Icon } from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
+import { MailComposer } from 'expo';
 
 
 function RenderCard() {

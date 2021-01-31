@@ -59,3 +59,11 @@ Animatable:
 ********************
 Redux Persist:
 >yarn add redux-persist@5.9.1
+
+********************
+Expo secure store:
+>expo install expo-secure-store
+expo install expo-permissions
+expo install expo-notifications
+
+********************

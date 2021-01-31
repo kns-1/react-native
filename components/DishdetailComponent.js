@@ -69,9 +69,9 @@ function RenderDish(props) {
                     ],
                     { cancelable: false }
                 );
-                }
+            }
             else if (recognizeComment(gestureState)) {
-                console.log('Comment gesture'); 
+                console.log('Comment gesture');
                 props.onPress('pen');
             }
 
