@@ -1,23 +1,29 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect } from 'react';
 import { Text, View, StyleSheet, Switch, Button, Alert } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import DatePicker from 'react-native-datepicker';
+//import DatePicker from 'react-native-datepicker';
+import RNDateTimePicker from '@react-native-community/datetimepicker';
 import * as Animatable from 'react-native-animatable';
 import * as Notifications from 'expo-notifications';
 import * as Permissions from 'expo-permissions';
+import * as Calendar from 'expo-calendar';
+
 
 class Reservation extends Component {
-
-    constructor(props) {
+        constructor(props) {
         super(props);
 
         this.state = {
             guests: 1,
             smoking: false,
-            date: ''
-        //    showModal: false
+            date: new Date('2020-06-12T14:42:42'),
+            mode: 'date',
+            show: false,
+            //    showModal: false
         }
+
     }
+
 
     static navigationOptions = {
         title: 'Reserve Table',
@@ -31,10 +37,13 @@ class Reservation extends Component {
         this.setState({
             guests: 1,
             smoking: false,
-            date: ''
-         //   showModal: false
+            date: new Date('2020-06-12T14:42:42'),
+            mode: 'date',
+            show: false,
+            //   showModal: false
         });
     }
+
 
     async obtainNotificationPermission() {
         let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS);
@@ -51,7 +60,7 @@ class Reservation extends Component {
         await this.obtainNotificationPermission();
         Notifications.presentLocalNotificationAsync({
             title: 'Your Reservation',
-            body: 'Reservation for '+ date + ' requested',
+            body: 'Reservation for ' + date + ' requested',
             ios: {
                 sound: true
             },
@@ -62,31 +71,112 @@ class Reservation extends Component {
             }
         });
     }
-    
-    handleReservation() {
-        console.log(JSON.stringify(this.state));
-       // this.toggleModal();
-       Alert.alert(
-        'Your Reservation OK?',
-        'Number of Guests: ' + this.state.guests + '\nSmoking?: ' + this.state.smoking + '\nDate and Time: ' + this.state.date,
-        [
-            {
-                text: 'Cancel',
-                onPress: () => { console.log('Cancel Pressed'); this.resetForm(); },
-                style: 'cancel'
-            },
-            {
-                text: 'OK',
-                onPress: () => { this.presentLocalNotification(this.state.date)
-                    console.log('OK Pressed'); this.resetForm(); }
-            },
-        ],
-        { cancelable: true }
-    );
+
+
+    async obtainCalendarPermission() {
+        let permission = await Permissions.getAsync(Permissions.CALENDAR);
+        if (permission.status !== 'granted') {
+            permission = await Permissions.askAsync(Permissions.CALENDAR);
+            if (permission.status !== 'granted') {
+                Alert.alert('Permission not granted to calendar');
+            }
+        }
+        return permission;
     }
 
+    async addReservationToCalendar() {
+        
+        await this.obtainCalendarPermission();
+        
+        let dateCurr = Date.parse(this.state.date);
+        let endDate = new Date(dateCurr + 3600 * 2 * 1000);
+        
+        const defaultCalendarSource=Platform.OS==='ios'?await this.getDefaultCalendarSource()
+        : { isLocalAccount: true, name: 'Expo Calendar' };
+        
+        const defaultCalendarId=await Calendar.createCalendarAsync({
+            title: 'Your Reservation at Con Fusion',
+            color: 'blue',
+            entityType: Calendar.EntityTypes.EVENT,
+            sourceId: defaultCalendarSource.id,
+            source : defaultCalendarSource,
+            name: 'internalCalendarName',
+            ownerAccount: 'personal',
+            accessLevel: Calendar.CalendarAccessLevel.OWNER,
+        });
+
+        await Calendar.createEventAsync(defaultCalendarId, {
+            title: 'Con Fusion Table Reservation',
+            startDate: this.state.date,
+            endDate: endDate,
+            timeZone: 'Asia/Hong_Kong',
+            location: '121, Clear Water Bay Road, Clear Water Bay, Kowloon, Hong Kong'
+        });
+    }
+
+    handleReservation() {
+        console.log(JSON.stringify(this.state));
+        // this.toggleModal();
+        Alert.alert(
+            'Your Reservation OK?',
+            'Number of Guests: ' + this.state.guests + '\nSmoking?: ' + this.state.smoking + '\nDate and Time: ' + this.state.date,
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => { console.log('Cancel Pressed'); this.resetForm(); },
+                    style: 'cancel'
+                },
+                {
+                    text: 'OK',
+                    onPress: () => {
+                        this.presentLocalNotification(this.state.date)
+                        this.addReservationToCalendar(this.state.date);
+                        console.log('OK Pressed'); this.resetForm();
+                    }
+                },
+            ],
+            { cancelable: true }
+        );
+    }
+
+    setDate = (event, date) => {
+        date = date || this.state.date;
+
+        this.setState({
+            show: Platform.OS === 'ios' ? true : false,
+            date,
+        });
+    }
+
+    show = mode => {
+        this.setState({
+            show: true,
+            mode,
+        });
+    }
+
+    datepicker = () => {
+        this.show('date');
+    }
+
+    timepicker = () => {
+        this.show('time');
+    }
+
+
     render() {
-    
+
+        useEffect(() => {
+            (async () => {
+                const { status } = await Calendar.requestCalendarPermissionsAsync();
+                if (status === 'granted') {
+                    const calendars = await Calendar.getCalendarsAsync(Calendar.EntityTypes.EVENT);
+                    console.log('Here are all your calendars:');
+                    console.log({ calendars });
+                }
+            })();
+        }, []);
+
         return (
             <Animatable.View animation="zoomIn" duration={2000} delay={1000}>
 
@@ -113,9 +203,13 @@ class Reservation extends Component {
                         onValueChange={(value) => this.setState({ smoking: value })}>
                     </Switch>
                 </View>
+
                 <View style={styles.formRow}>
-                    <Text style={styles.formLabel}>Date and Time</Text>
-                    <DatePicker
+                    {/* <Text style={styles.formLabel}>Date and Time</Text> */}
+
+                    <Button onPress={this.datepicker} title="Show date picker!" />
+
+                    {/* <DatePicker
                         style={{ flex: 2, marginRight: 20 }}
                         value={this.state.date}
                         format=''
@@ -137,8 +231,14 @@ class Reservation extends Component {
                             // ... You can check the source to find the other keys. 
                         }}
                         onChange={(date) => { this.setState({ date: date }) }}
-                    />
+                    /> */}
+
                 </View>
+                <View style={styles.formRow}>
+                    <Button onPress={this.timepicker} title="Show time picker!" />
+                </View>
+
+
                 <View style={styles.formRow}>
                     <Button
                         onPress={() => this.handleReservation()}
@@ -166,8 +266,18 @@ class Reservation extends Component {
                     </View>
                 </Modal>
                 */}
-
+                { this.show && <RNDateTimePicker
+                    value={this.state.date}
+                    mode={this.state.mode}
+                    is24Hour={true}
+                    style={{ flex: 2, marginRight: 20 }}
+                    display="default"
+                    onChange={this.setDate}
+                />
+                }
             </Animatable.View>
+
+
         );
     }
 
@@ -205,5 +315,7 @@ const styles = StyleSheet.create({
         margin: 10
     }
 });
+
+
 
 export default Reservation;
